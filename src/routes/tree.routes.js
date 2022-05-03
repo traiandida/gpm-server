@@ -1,10 +1,8 @@
 import { Router } from "express";
-import { getPath, getTree } from "../controllers/tree.controller";
+import { getPath } from "../controllers/tree.controller";
 
 const router = Router()
 
-router.get('/', getTree)
-router.get('/:path', getPath)
-
+router.get('*', getPath)
 
 export default router

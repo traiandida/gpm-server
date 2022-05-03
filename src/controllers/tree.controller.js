@@ -1,28 +1,27 @@
 import directoryTree from "directory-tree";
-import path from 'path';
+import config from '../config'
+import path from 'path'
 
+export const getPath = async (req, res ) => {
 
-export const getTree = async (req, res ) => {
-    try{
-        // const tree = directoryTree(__dirname, 'public')
-        // console.log(tree);
-        console.log(path.basename(__dirname));
-        return res.status(200)
+    const url = req.params[0]
+
+    let fullPath = (url === undefined) ? config.folder : path.join(config.folder , url)
+
+    try{        
+        const directory = path.resolve(fullPath)
+        const tree = directoryTree(directory, {attributes: ["size", "type", "extension"]});
+
+        if (tree === null) {
+            return res.sendStatus(404);
+        }
+
+        if(tree.type !== 'directory') {
+            return res.download(tree.path)
+        }
+
+        return res.json(tree)
     }catch(error){
-        res.status(500)
-        return res.send(error.message)
+        return res.sendStatus(500);
     }
-}
-
-export const getPath = async (req, res) => {
-    
-    const { path } = req.params;
-    
-    try{
-        console.log(path);
-    }catch(error){
-        res.status(500)
-        return res.send(error.message)
-    }
-
 }
