@@ -16,10 +16,6 @@ export const getPath = async (req, res ) => {
             return res.sendStatus(404);
         }
 
-        if(tree.type !== 'directory') {
-            return res.download(tree.path)
-        }
-
         return res.json(tree)
     }catch(error){
         return res.sendStatus(500);
